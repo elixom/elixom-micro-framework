@@ -1,0 +1,34 @@
+Options -Indexes 
+
+#######ACCESS to files
+order deny,allow
+#CORE
+<Files ~ "^\/\.data\/*">
+  deny from all
+</Files>
+<Files ~ "\/\.includes\/*">
+  deny from all
+</Files>
+<Files ~ "^config.php">
+deny from all
+</Files>
+<Files ~ "\.(log|sql)$">
+  deny from all
+</Files>
+
+
+<FilesMatch "\.(ico|pdf|flv|jpg|jpeg|png|gif|swf)$">
+  Header set Expires "Mon, 12 Dec 2016 20:00:00 GMT"
+  ExpiresActive On
+  ExpiresDefault "modification plus 30 day"
+</FilesMatch>
+
+
+#remove www
+RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+RewriteRule ^(.*)$ http://%1/$1 [R=301,L]
+
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_URI} !index.php?$
+RewriteRule ^(.+)$ index.php [NC]
